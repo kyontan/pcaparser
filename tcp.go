@@ -7,13 +7,17 @@ type TCP struct {
 }
 
 //ParseTCP
-func ParseTCP(data []byte) *TCP {
+func ParseTCP(data []byte) (*TCP, error) {
 	t := &TCP{}
+
 	//header
+	if len(data) < DefaultTCPHeaderLen {
+		return nil, errPacketHeaderTooShort
+	}
 	th := ParseTCPHeader(data[0:DefaultTCPHeaderLen])
 	t.Header = th
 	//options
 	//Todo: tcp options
 
-	return t
+	return t, nil
 }

@@ -53,17 +53,12 @@ func (p *Pcap) ReadHeader() (*PcapHeader, error) {
 }
 
 //ReadPacket
-func (p *Pcap) ReadPacket() *Packet {
-
+func (p *Pcap) ReadPacket() (*Packet, error) {
 	//ip data
 	packet, err := ParsePacket(p)
 	if err != nil {
-		if err == io.EOF {
-			log.Println("done")
-			return nil
-		}
-		log.Panicln(err)
+		return nil, err
 	}
-	return packet
 
+	return packet, nil
 }

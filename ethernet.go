@@ -23,7 +23,7 @@ func ParseEthernet(data []byte) (*Ethernet, error) {
 		dataObj, err = ParseIPv4(data)
 		break
 	default:
-		log.Println(eh.Type.String())
+		// log.Println(eh.Type.String())
 	}
 	if err != nil {
 		return nil, err

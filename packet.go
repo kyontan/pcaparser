@@ -1,10 +1,5 @@
 package pcaparser
 
-import (
-	"io"
-	"log"
-)
-
 //Packet
 type Packet struct {
 	Header *PacketHeader
@@ -19,29 +14,26 @@ func ParsePacket(pcap *Pcap) (*Packet, error) {
 	headerData := make([]byte, PacketHeaderLen)
 	_, err := pcap.r.Read(headerData)
 	if err != nil {
-		if err == io.EOF {
-			return nil, err
-		}
-		log.Panicln(err)
+		return nil, err
 	}
 
 	//header
 	ph, err := ParsePacketHeader(pcap, headerData)
 	if err != nil {
-		log.Panicln(err)
+		return nil, err
 	}
 	p.Header = ph
 
 	//data
-	data := make([]byte, ph.Len)
+	data := make([]byte, ph.CapLen)
 	_, err = pcap.r.Read(data)
 	if err != nil {
-		log.Panicln(err)
+		return nil, err
 	}
 	//ethernet
 	e, err := ParseEthernet(data)
 	if err != nil {
-		log.Panicln(err)
+		return nil, err
 	}
 	p.Data = e
 	return p, nil

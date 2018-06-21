@@ -22,12 +22,12 @@ func ParseIPv4(data []byte) (*IPv4, error) {
 	data = data[ih.Len:]
 	switch ih.Protocol {
 	case IP_ICMPType:
-		i.Data = ParseICMP(data)
+		i.Data, err = ParseICMP(data)
 	case IP_TCPType:
-		i.Data = ParseTCP(data)
+		i.Data, err = ParseTCP(data)
 		break
 	case IP_UDPType:
-		i.Data = ParseUDP(data)
+		i.Data, err = ParseUDP(data)
 		break
 	// case IP_ICMPType:
 
@@ -60,5 +60,10 @@ func ParseIPv4(data []byte) (*IPv4, error) {
 		// ParseTCP(data)
 		break
 	}
+
+	if err != nil {
+		return nil, err
+	}
+
 	return i, nil
 }
